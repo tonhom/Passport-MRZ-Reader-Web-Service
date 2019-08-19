@@ -16,7 +16,7 @@
 
 > tesseract for windows
 
-download and install then add directory to tesseract installed location to PATH in system variables section
+download and install then add directory to tesseract installed location to PATH in system variables section and restart windows
 
 -------------------------------
 ## how to run
