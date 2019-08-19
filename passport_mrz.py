@@ -162,7 +162,7 @@ def get_passport_data(path):
                 'expiry_date': exp.strftime('%Y-%m-%d')
             }
             return resp
-        except expression as identifier:
+        except Exception as identifier:
             return None
     else:
         return None

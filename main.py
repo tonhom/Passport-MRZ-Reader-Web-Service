@@ -59,7 +59,7 @@ def upload_file():
 
                 # remove file
                 os.remove(imgPath)
-            except expression as identifier:
+            except Exception as identifier:
                 resp.status = False
                 resp.message = str(identifier)
                 resp.data = None
