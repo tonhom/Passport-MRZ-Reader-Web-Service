@@ -124,7 +124,8 @@ def get_passport_data(path):
         (h, w) = roiBlackhat.shape[:2]
         center = (w // 2, h // 2)
         M = cv2.getRotationMatrix2D(center, angle, 1.0)
-        rotated = cv2.warpAffine(roiBlackhat, M, (w, h), flags=cv2.INTER_CUBIC, borderMode=cv2.BORDER_REPLICATE)
+        rotated = cv2.warpAffine(
+            roiBlackhat, M, (w, h), flags=cv2.INTER_CUBIC, borderMode=cv2.BORDER_REPLICATE)
         # print(angle)
 
         # roiBitwise = cv2.bitwise_not(roi)
@@ -147,8 +148,6 @@ def get_passport_data(path):
             bd = bd - oneCentury
 
         exp = datetime.datetime.strptime(fields.expiry_date, '%y%m%d')
-        if exp > now:
-            exp = exp - oneCentury
 
         # print(bd.strftime('%Y-%m-%d'))
         try:
