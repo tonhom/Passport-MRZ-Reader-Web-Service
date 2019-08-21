@@ -10,6 +10,16 @@
 ------------------------------
 ## install
 
+- Flask
+- Flask-Cors
+- imutils
+- mrz
+- numpy
+- opencv-python
+- pytesseract
+- python-dateutil
+- argparse
+
 > python packages
 
     pip install -r requirements.txt
