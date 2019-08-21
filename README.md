@@ -37,6 +37,15 @@ first is set main script
 
 
 command to run
+
+> run with https
+
+but we need to add app.run(...)
+
+    python main.py -ip=172.22.25.30 --port 5000
+
+
+
 > linux
 
     flask run
@@ -45,6 +54,9 @@ command to run
 
     python -m flask run
 
+> run across network with machine ip
+
+    python -m flask run --host=0.0.0.0
 
 upload from method post enctype = multipart/form-data
 

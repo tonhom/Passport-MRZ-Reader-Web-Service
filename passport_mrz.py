@@ -17,6 +17,7 @@ def get_passport_data(path):
     sqKernel = cv2.getStructuringElement(cv2.MORPH_RECT, (25, 25))
 
     image = cv2.imread(path)
+    image = cv2.rotate(image, rotateCode=cv2.ROTATE_90_COUNTERCLOCKWISE)
     image = imutils.resize(image, height=600)
     gray = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
     # gray = cv2.bitwise_not(gray)
@@ -131,6 +132,7 @@ def get_passport_data(path):
         # roiBitwise = cv2.bitwise_not(roi)
         # roiThresh = cv2.threshold(roi, 0, 255, cv2.THRESH_BINARY | cv2.THRESH_OTSU)[1]
         # cv2.imshow("ROI", rotated)
+        # cv2.waitKey()
         text = pytesseract.image_to_string(rotated, config=config)
         # print(text)
 
