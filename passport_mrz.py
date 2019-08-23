@@ -14,7 +14,7 @@ from mrz.checker.td3 import TD3CodeChecker
 def get_passport_data(path):
     # initialize a rectangular and square structuring kernel
     rectKernel = cv2.getStructuringElement(cv2.MORPH_RECT, (13, 5))
-    sqKernel = cv2.getStructuringElement(cv2.MORPH_RECT, (25, 25))
+    sqKernel = cv2.getStructuringElement(cv2.MORPH_RECT, (27, 27))
 
     image = cv2.imread(path)
     image = cv2.rotate(image, rotateCode=cv2.ROTATE_90_COUNTERCLOCKWISE)
@@ -101,8 +101,10 @@ def get_passport_data(path):
     # cv2.imshow("Image", image)
     if roi is not None:
         config = (
-            "--oem 0 -c tessedit_char_whitelist=ABCDEFGHIJKLMNOPQRSTUVWXYZ<1234567890")
+            "--oem 6 -c tessedit_char_whitelist=ABCDEFGHIJKLMNOPQRSTUVWXYZ<1234567890")
         # config = ("--oem 0")
+        # cv2.imshow("ROI", roi)
+        # cv2.waitKey()
         roiGray = cv2.cvtColor(roi, cv2.COLOR_BGR2GRAY)
         roiBlackhat = cv2.morphologyEx(roiGray, cv2.MORPH_BLACKHAT, rectKernel)
         roiThresh = cv2.threshold(
@@ -131,7 +133,7 @@ def get_passport_data(path):
 
         # roiBitwise = cv2.bitwise_not(roi)
         # roiThresh = cv2.threshold(roi, 0, 255, cv2.THRESH_BINARY | cv2.THRESH_OTSU)[1]
-        # cv2.imshow("ROI", rotated)
+        # cv2.imshow("ROTATED", rotated)
         # cv2.waitKey()
         text = pytesseract.image_to_string(rotated, config=config)
         # print(text)
