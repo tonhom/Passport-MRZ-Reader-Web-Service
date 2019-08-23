@@ -19,7 +19,7 @@ ALLOWED_EXTENSIONS = {'png', 'jpg', 'jpeg'}
 
 app = Flask(__name__)
 app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
-app.secret_key = "dsfmdskojfdsjfkdshfjkds"
+app.secret_key = "a6f31e66-c54e-11e9-aa8c-2a2ae2dbcce4"
 # app.debug = True
 
 cors = CORS(app)
