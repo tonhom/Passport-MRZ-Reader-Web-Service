@@ -4,12 +4,12 @@ from flask_cors import CORS
 from werkzeug.utils import secure_filename
 import uuid
 from passport_mrz import get_passport_data
-import argparse
+# import argparse
 
-parser = argparse.ArgumentParser(prog='Passport MRZ Reader Web Service', description='Extract information from Passport MRZ (TD3 format)')
-parser.add_argument('-ip', '--host', type=str, default="127.0.0.1")
-parser.add_argument('-p', '--port', type=int, default=5000)
-args = parser.parse_args()
+# parser = argparse.ArgumentParser(prog='Passport MRZ Reader Web Service', description='Extract information from Passport MRZ (TD3 format)')
+# parser.add_argument('-ip', '--host', type=str, default="127.0.0.1")
+# parser.add_argument('-p', '--port', type=int, default=5000)
+# args = parser.parse_args()
 
 cer = os.path.join(os.path.dirname(__file__), 'Cert/mrz_reader.crt')
 key = os.path.join(os.path.dirname(__file__), 'Cert/mrz_reader.key')
@@ -108,5 +108,6 @@ def upload_file():
 
 
 if __name__ == "__main__":
-    os.environ['DEBUG'] = "1"
-    app.run(debug=True, ssl_context=(cer, key), host=args.host, port=args.port)
+    # os.environ['DEBUG'] = "1"
+    # app.run(debug=True, ssl_context=(cer, key), host=args.host, port=args.port)
+    app.run()
