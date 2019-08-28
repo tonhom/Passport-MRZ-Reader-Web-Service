@@ -109,34 +109,47 @@ def get_passport_data(path):
         roiBlackhat = cv2.morphologyEx(roiGray, cv2.MORPH_BLACKHAT, rectKernel)
         roiThresh = cv2.threshold(
             roiBlackhat, 0, 255, cv2.THRESH_BINARY | cv2.THRESH_OTSU)[1]
-        coords = np.column_stack(np.where(roiThresh > 0))
-        angle = cv2.minAreaRect(coords)[-1]
-        # the `cv2.minAreaRect` function returns values in the
-        # range [-90, 0); as the rectangle rotates clockwise the
-        # returned angle trends to 0 -- in this special case we
-        # need to add 90 degrees to the angle
-        if angle < -45:
-            angle = -(90 + angle) - 0.3
+        # coords = np.column_stack(np.where(roiThresh > 0))
+        # angle = cv2.minAreaRect(coords)[-1]
+        # # the `cv2.minAreaRect` function returns values in the
+        # # range [-90, 0); as the rectangle rotates clockwise the
+        # # returned angle trends to 0 -- in this special case we
+        # # need to add 90 degrees to the angle
+        # if angle < -45:
+        #     angle = -(90 + angle)
 
-        # otherwise, just take the inverse of the angle to make
-        # it positive
-        else:
-            angle = -angle - 0.3
+        # # otherwise, just take the inverse of the angle to make
+        # # it positive
+        # else:
+        #     angle = -angle
 
-        # rotate the image to deskew it
-        (h, w) = roiBlackhat.shape[:2]
-        center = (w // 2, h // 2)
-        M = cv2.getRotationMatrix2D(center, angle, 1.0)
-        rotated = cv2.warpAffine(
-            roiBlackhat, M, (w, h), flags=cv2.INTER_CUBIC, borderMode=cv2.BORDER_REPLICATE)
+        # # rotate the image to deskew it
+        # (h, w) = roiBlackhat.shape[:2]
+        # center = (w // 2, h // 2)
+        # M = cv2.getRotationMatrix2D(center, angle, 1.0)
+        # rotated = cv2.warpAffine(
+        #     roiBlackhat, M, (w, h), flags=cv2.INTER_CUBIC, borderMode=cv2.BORDER_REPLICATE)
         # print(angle)
 
         # roiBitwise = cv2.bitwise_not(roi)
         # roiThresh = cv2.threshold(roi, 0, 255, cv2.THRESH_BINARY | cv2.THRESH_OTSU)[1]
-        # cv2.imshow("ROTATED", rotated)
+        # cv2.imshow("ROTATED", roiThresh)
         # cv2.waitKey()
-        text = pytesseract.image_to_string(rotated, config=config)
-        # print(text)
+        text = pytesseract.image_to_string(roiThresh, config=config)
+        text = text.replace(" ", "")
+        textList = text.split("\n")
+        textEnhanced = []
+        for txt in textList:
+            l = len(txt) > 44
+            if l > 44:
+                textEnhanced.append(txt[0:44])
+            elif l < 44:
+                complement = txt + "<<<<<<<<<<"
+                textEnhanced.append(complement[0:44])
+            else:
+                textEnhanced.append(txt)
+        # print(textEnhanced)
+        text = "\n".join(textEnhanced)
 
         td3_check = TD3CodeChecker(text)
         fields = td3_check.fields()
@@ -147,11 +160,19 @@ def get_passport_data(path):
         now = datetime.datetime.now()
         oneCentury = relativedelta(years=100)
 
-        bd = datetime.datetime.strptime(fields.birth_date, '%y%m%d')
-        if bd > now:
-            bd = bd - oneCentury
+        bd = None
+        try:
+            bd = datetime.datetime.strptime(fields.birth_date, '%y%m%d')
+            if bd > now:
+                bd = bd - oneCentury
+        except Exception as identifier:
+            bd = None
 
-        exp = datetime.datetime.strptime(fields.expiry_date, '%y%m%d')
+        exp = None
+        try:
+            exp = datetime.datetime.strptime(fields.expiry_date, '%y%m%d')
+        except Exception as identifier:
+            exp = None
 
         # print(bd.strftime('%Y-%m-%d'))
         try:
@@ -162,8 +183,8 @@ def get_passport_data(path):
                 'passport_number': fields.document_number,
                 'nationality': fields.nationality,
                 'sex': 'M' if fields.sex == 'H' else fields.sex,
-                'birth_date': bd.strftime('%Y-%m-%d'),
-                'expiry_date': exp.strftime('%Y-%m-%d')
+                'birth_date': bd.strftime('%Y-%m-%d') if bd is not None else None,
+                'expiry_date': exp.strftime('%Y-%m-%d') if exp is not None else None
             }
             return resp
         except Exception as identifier:
