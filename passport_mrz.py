@@ -9,6 +9,7 @@ import imutils
 import cv2
 import pytesseract
 from mrz.checker.td3 import TD3CodeChecker
+from data_fixer import passport_fixer
 
 
 def get_passport_data(path):
@@ -180,7 +181,7 @@ def get_passport_data(path):
                 'surname': fields.surname.replace("0", "O"),
                 'given_names': fields.name.replace("0", "O"),
                 'country_code': fields.country,
-                'passport_number': fields.document_number,
+                'passport_number': passport_fixer(fields.document_number),
                 'nationality': fields.nationality,
                 'sex': 'M' if fields.sex == 'H' else fields.sex,
                 'birth_date': bd.strftime('%Y-%m-%d') if bd is not None else None,
