@@ -101,8 +101,8 @@ def get_passport_data(path):
     # show the output images
     # cv2.imshow("Image", image)
     if roi is not None:
-        config = (
-            "--oem 6 -c tessedit_char_whitelist=ABCDEFGHIJKLMNOPQRSTUVWXYZ<1234567890")
+        config = ("--oem 0 --psm 6 -c tessedit_char_whitelist=ABCDEFGHIJKLMNOPQRSTUVWXYZ<1234567890")
+        # config = ("--oem 3 --psm 6 --tessdata-dir ./Trained -l eng+ocrb")
         # config = ("--oem 0")
         # cv2.imshow("ROI", roi)
         # cv2.waitKey()
@@ -136,7 +136,11 @@ def get_passport_data(path):
         # roiThresh = cv2.threshold(roi, 0, 255, cv2.THRESH_BINARY | cv2.THRESH_OTSU)[1]
         # cv2.imshow("ROTATED", roiThresh)
         # cv2.waitKey()
+        # pytesseract.image_to_string(Image.open("./imagesStackoverflow/xyz-small-gray.png"),lang="eng",boxes=False,config="--psm 4 --oem 3 -c tessedit_char_whitelist=-01234567890XYZ:"))
         text = pytesseract.image_to_string(roiThresh, config=config)
+        # print(text)
+
+        # enhancing text from ocr engine
         text = text.replace(" ", "")
         textList = text.split("\n")
         textEnhanced = []
@@ -145,7 +149,7 @@ def get_passport_data(path):
             if l > 44:
                 textEnhanced.append(txt[0:44])
             elif l < 44:
-                complement = txt + "<<<<<<<<<<"
+                complement = txt + "<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<"
                 textEnhanced.append(complement[0:44])
             else:
                 textEnhanced.append(txt)
@@ -178,8 +182,8 @@ def get_passport_data(path):
         # print(bd.strftime('%Y-%m-%d'))
         try:
             resp = {
-                'surname': fields.surname.replace("0", "O"),
-                'given_names': fields.name.replace("0", "O"),
+                'surname': "" if fields.surname == "None" else fields.surname.replace("0", "O"),
+                'given_names': "" if fields.name == "None" else fields.name.replace("0", "O"),
                 'country_code': fields.country,
                 'passport_number': passport_fixer(fields.document_number),
                 'nationality': fields.nationality,

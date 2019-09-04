@@ -11,8 +11,8 @@ from passport_mrz import get_passport_data
 # parser.add_argument('-p', '--port', type=int, default=5000)
 # args = parser.parse_args()
 
-cer = os.path.join(os.path.dirname(__file__), 'Cert/mrz_reader.crt')
-key = os.path.join(os.path.dirname(__file__), 'Cert/mrz_reader.key')
+# cer = os.path.join(os.path.dirname(__file__), 'Cert/mrz_reader.crt')
+# key = os.path.join(os.path.dirname(__file__), 'Cert/mrz_reader.key')
 
 UPLOAD_FOLDER = './Temp'
 ALLOWED_EXTENSIONS = {'png', 'jpg', 'jpeg'}
@@ -38,7 +38,7 @@ def allowed_file(filename):
     return '.' in filename and filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
 
 
-@app.route('/', methods=['GET', 'POST'])
+@app.route('/Passport_MRZ', methods=['GET', 'POST'])
 def upload_file():
     resp = Response()
     if request.method == 'POST':
