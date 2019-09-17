@@ -18,7 +18,11 @@ def get_passport_data(path):
     sqKernel = cv2.getStructuringElement(cv2.MORPH_RECT, (27, 27))
 
     image = cv2.imread(path)
-    image = cv2.rotate(image, rotateCode=cv2.ROTATE_90_COUNTERCLOCKWISE)
+    imgHeight = image.shape[0]
+    imgWidth = image.shape[1]
+    if imgWidth < imgHeight:
+        image = cv2.rotate(image, rotateCode=cv2.ROTATE_90_COUNTERCLOCKWISE)
+        
     image = imutils.resize(image, height=600)
     gray = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
     # gray = cv2.bitwise_not(gray)
