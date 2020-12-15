@@ -11,7 +11,7 @@ MarkupSafe==1.1.1
 mrz==0.5.5
 numpy==1.17.0
 opencv-python==4.1.0.25
-Pillow==6.2.0
+Pillow==7.1.0
 pycparser==2.19
 pyOpenSSL==19.0.0
 pytesseract==0.2.9
